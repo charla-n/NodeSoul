@@ -3,6 +3,7 @@ var pwd;
 var location;
 var data;
 var contacts = [];
+var netsoul;
 
 exports.SetLogin = function (glogin) {
     login = glogin;
@@ -32,7 +33,7 @@ exports.SetData = function (gdata) {
     data = gdata;
 }
 
-exports.GetDate = function () {
+exports.GetData = function () {
     return data;
 }
 
@@ -44,3 +45,5 @@ exports.AddContact = function (login) {
 exports.GetContacts = function () {
     return contacts;
 }
+
+exports.Netsoul = netsoul;

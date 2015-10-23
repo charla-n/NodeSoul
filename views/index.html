@@ -4,8 +4,33 @@
 <head>
     <meta charset="utf-8" />
     <title>Index</title>
+    <link href="../css/metro.min.css" rel="stylesheet">
+    <script src="../js/jquery-2.1.4.min.js"></script>
+    <script src="../js/metro.min.js"></script>
+    <script src="../app/Index.js"></script>
 </head>
 <body>
-
+    <ul class="horizontal-menu">
+        <li>
+            <a href="#" class="dropdown-toggle">File</a>
+            <ul class="d-menu" data-role="dropdown">
+                <li>
+                    <a href="#" class="dropdown-toggle">States</a>
+                    <ul class="d-menu" data-role="dropdown">
+                        <li><a id="savailable" href="#">Available</a></li>
+                        <li><a id="saway" href="#">Away</a></li>
+                        <li><a id="slocked" href="#">Locked</a></li>
+                    </ul>
+                </li>
+                <li><a id="close" href="#">Close</a></li>
+            </ul>
+        </li>
+        <li>
+            <a href="#" class="dropdown-toggle">Contact</a>
+            <ul class="d-menu" data-role="dropdown">
+                <li><a id="addcontact" href="#">Add Contact</a></li>
+            </ul>
+        </li>
+    </ul>
 </body>
 </html>

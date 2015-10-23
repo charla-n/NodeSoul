@@ -1,6 +1,5 @@
 ﻿var net = require("net");
 var prot = require('../app/Protocol.js');
-var socket;
 
 function Network(port, host) {
     this.port = port;
@@ -10,26 +9,24 @@ function Network(port, host) {
 
 Network.prototype.Connect = function () {
     if (this.connected == false) {
-        socket = net.connect(this.port, this.host);
-        socket.on("data", OnData);
+        this.socket = net.connect(this.port, this.host);
+        this.socket.on("data", function (chunk) {
+            prot.Parse(chunk.toString(), this.socket);
+            console.log(chunk.toString());
+        }.bind({ socket: this.socket }));
         this.connected = true;
     }
 }
 
 Network.prototype.Send = function (msg) {
-    socket.write(msg);
+    this.socket.write(msg);
 }
 
 Network.prototype.Disconnect = function () {
     if (this.connected == true) {
-        socket.destroy();
+        this.socket.destroy();
         this.connected = false;
     }
-}
-
-function OnData(chunk) {
-    prot.Parse(chunk.toString(), socket);
-    console.log(chunk.toString());
 }
 
 module.exports = Network
