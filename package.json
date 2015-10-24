@@ -1,0 +1,4 @@
+{
+	"name": "nodesoul",
+	"main": "./views/auth.html"
+}

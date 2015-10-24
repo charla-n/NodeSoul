@@ -4,6 +4,9 @@ var location;
 var data;
 var contacts = [];
 var netsoul;
+var id;
+var state = "logged off";
+var connected = 0;
 
 exports.SetLogin = function (glogin) {
     login = glogin;
@@ -39,11 +42,24 @@ exports.GetData = function () {
 
 exports.AddContact = function (login) {
     contacts.push({ login: login, ignored: false, positions: []});
-    console.log(contacts);
+}
+
+exports.FlushContact = function () {
+    contacts = [];
 }
 
 exports.GetContacts = function () {
     return contacts;
 }
 
+exports.SetState = function (gstate) {
+    state = gstate;
+}
+
+exports.GetState = function () {
+    return state;
+}
+
 exports.Netsoul = netsoul;
+exports.Connected = connected;
+exports.Id = id;

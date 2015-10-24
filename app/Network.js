@@ -14,6 +14,9 @@ Network.prototype.Connect = function () {
             prot.Parse(chunk.toString(), this.socket);
             console.log(chunk.toString());
         }.bind({ socket: this.socket }));
+        this.socket.on("error", function () {
+            prot.Emitter.emit("auth", false);
+        });
         this.connected = true;
     }
 }

@@ -2,15 +2,31 @@
 var util = require('util');
 var crypto = require('crypto');
 var underscore = require('underscore');
+var EventEmitter = require('events').EventEmitter;
+
+var emitter = new EventEmitter();
 var args;
 
 const REP_OK = "rep 002 -- cmd end";
+const AUTH_FAILED = "rep 033 -- ext user identification fail";
 
 function Parse(msg, client) {
     args = msg.split(/\r\n|\n/);
     underscore.each(args, function (arr) {
-        if (arr === REP_OK || arr.length == 0)
+        if (arr === AUTH_FAILED) {
+            emitter.emit("auth", false);
             return;
+        }
+        if (arr === REP_OK || arr.length == 0) {
+            if (arr === REP_OK && Client.Connected == 0) {
+                Client.Connected++;
+            }
+            else if (arr === REP_OK && Client.Connected == 1) {
+                Client.Connected++;
+                emitter.emit("auth", true);
+            }
+            return;
+        }
         // salut cmd
         if (arr.startsWith("salut") == true) {
             Salut(msg, client);
@@ -68,6 +84,9 @@ function RespWatch(splittedarr) {
 }
 
 function Salut(msg, client) {
+    
+    Client.Connected = false;
+
     var salutArgs = msg.split(" ");
     var res = crypto.createHash('md5').update(salutArgs[2] + "-" + salutArgs[3] + "/" + salutArgs[4] + Client.GetPwd()).digest("hex");
     
@@ -85,9 +104,10 @@ function RespListUsers(splittedarr) {
             console.log(Client.GetContacts());
         }
         else {
-            Client.GetContacts().push(UpdatePosition(splittedarr));
+            Client.GetContacts()[contactindex].positions.push(UpdatePosition(splittedarr));
             console.log(Client.GetContacts());
         }
+        emitter.emit("listuser", Client.GetContacts()[contactindex]);
     }
 }
 
@@ -130,6 +150,7 @@ function Quit() {
 }
 
 function Status(status) {
+    Client.SetState(status);
     return util.format("state %s:%s\n", status, Math.floor(Date.now() / 1000));
 }
 
@@ -139,3 +160,4 @@ module.exports.Watch = Watch;
 module.exports.ListUsers = ListUsers;
 module.exports.Msg = Msg;
 module.exports.Parse = Parse;
+exports.Emitter = emitter;

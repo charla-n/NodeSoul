@@ -1,0 +1,24 @@
+﻿<div class="listview set-border padding10 default list-type-icons" data-role="listview" id="lv1" data-on-list-click="alert('You select ' + list.find('.list-title').text())">
+    {% for contact in contacts %}
+        {% if contact.positions.length == 0 %}
+            <div class="list">
+                <span class="mif-bubble fg-red list-icon"></span>
+                <span class="list-title" style="vertical-align:middle">{{contact.login}}</span>
+            </div>
+        {% else %}
+            {% for position in contact.positions %}
+                <div class="list">
+                    <span class="mif-bubble 
+                          {% if position.status == 'logout' %} fg-red 
+                          {% elseif position.status == 'actif' %} fg-green
+                          {% elseif position.status == 'away' %} fg-orange
+                          {% elseif position.status == 'lock' %} fg-gray
+                          {% else %} fg-violet
+                          {% endif %} list-icon"></span>
+                    <span class="list-title" style="vertical-align:middle">[{{position.socket}}]{{contact.login}} on {{position.location}}</span>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endfor %}
+</div>
+
