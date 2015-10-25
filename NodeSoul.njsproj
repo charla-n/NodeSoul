@@ -17,6 +17,12 @@
   <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
   <ItemGroup>
     <Content Include="credits.html" />
+    <Content Include="css\metro-icons.min.css" />
+    <Content Include="fonts\metro.eot" />
+    <Content Include="fonts\metro.svg" />
+    <Content Include="fonts\metro.ttf" />
+    <Content Include="fonts\metro.woff" />
+    <Content Include="fonts\selection.json" />
     <Content Include="package.json" />
     <Compile Include="app\AddContact.js" />
     <Compile Include="app\Auth.js" />
@@ -31,12 +37,14 @@
     <Content Include="views\addcontact.html" />
     <Content Include="views\auth.html" />
     <Content Include="views\index.html" />
+    <Content Include="views\index.tpl.html" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="app" />
     <Folder Include="css" />
     <Folder Include="js" />
     <Folder Include="locales" />
+    <Folder Include="fonts\" />
     <Folder Include="views" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />

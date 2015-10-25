@@ -4,9 +4,9 @@ var Client = require('../app/Client.js');
 var swig = require('swig');
 var Storage = require("../app/Storage.js");
 
-//if (Client.Connected == false) {
-//    window.location.href = "auth.html";
-//}
+if (Client.Connected == false) {
+    window.location.href = "auth.html";
+}
 
 $(document).ready(function () {
     $("#close").click(function () {
@@ -26,11 +26,18 @@ $(document).ready(function () {
     });
     $("#addcontact").click(function () {
         var new_win = gui.Window.open('addcontact.html');
+
+        new_win.on("close", function () {
+            this.hide();
+            render();
+        });
     });
     setState(Client.GetState());
     ListAndWatchUsers();
     Prot.Emitter.on("listuser", function (contact) {
-        console.log(Client.GetContacts());
+        render();
+    });
+    Prot.Emitter.on("watchuser", function (contact) {
         render();
     });
 });
@@ -40,8 +47,6 @@ function setState(state) {
 }
 
 function render() {
-    console.log("render");
-    console.log(Client.GetContacts());
     $("#scontacts").html(swig.renderFile("./views/index.tpl.html", {
         contacts: Client.GetContacts()
     }));

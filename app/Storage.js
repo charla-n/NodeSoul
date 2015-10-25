@@ -10,6 +10,8 @@ var _this;
 function Storage(db) {
     this.db = db;
     db.transaction(function (tx) {
+        //tx.executeSql("DROP TABLE suser");
+        //tx.executeSql("DROP TABLE scontact");
         tx.executeSql('CREATE TABLE IF NOT EXISTS suser (id INTEGER PRIMARY KEY AUTOINCREMENT, login text, data text, location text)');
         tx.executeSql('CREATE TABLE IF NOT EXISTS scontact (id INTEGER PRIMARY KEY AUTOINCREMENT, login text, ignored bit)');
     });
@@ -21,29 +23,33 @@ util.inherits(Storage, EventEmitter);
 
 Storage.prototype.InsertUser = function (login, data, location) {
     this.db.transaction(function (tx) {
-        tx.executeSql("INSERT INTO suser (login, data, location) VALUES(?, ?, ?)", [login, data, location], function () {
+        tx.executeSql("INSERT INTO suser (id, login, data, location) VALUES(NULL, ?, ?, ?)", [login, data, location], function () {
             _this.emit("insertuser");   
-        });
+        }, onError);
     });
 }
 
 Storage.prototype.InsertContact = function (login, ignored) {
     this.db.transaction(function (tx) {
-        tx.executeSql("INSERT INTO scontact (login, ignored) VALUES(?, ?)", [login, ignored], function () {
+        tx.executeSql("INSERT INTO scontact (id, login, ignored) VALUES(NULL, ?, ?)", [login, ignored], function (tx, results) {
             _this.emit("insertcontact");
-        });
+        }, onError);
     });
 }
 
 Storage.prototype.UpdateContact = function (login, ignored) {
     this.db.transaction(function (tx) {
-        tx.executeSql("UPDATE scontact SET ignored=? WHERE login=?", [ignored, login]);
+        tx.executeSql("UPDATE scontact SET ignored=? WHERE login=?", [ignored, login], function (tx, results) {
+            
+        }, onError);
     });
 }
 
 Storage.prototype.UpdateUser = function (login, data, location, id) {
     this.db.transaction(function (tx) {
-        tx.executeSql("UPDATE suser SET login=?,data=?,location=? WHERE id=?", [login, data, location, id]);
+        tx.executeSql("UPDATE suser SET login=?,data=?,location=? WHERE id=?", [login, data, location, id], function (tx, results) {
+            
+        }, onError);
     });
 }
 
@@ -56,7 +62,7 @@ Storage.prototype.GetUser = function () {
             else {
                 _this.emit("getuser", null);
             }
-        });
+        }, onError);
     });
 }
 
@@ -69,7 +75,7 @@ Storage.prototype.GetContact = function (login) {
             else {
                 _this.emit("getcontact", null);
             }
-        });
+        }, onError);
     });
 }
 
@@ -77,8 +83,12 @@ Storage.prototype.GetAllContacts = function () {
     this.db.transaction(function (tx) {
         tx.executeSql("SELECT * FROM scontact", [], function (tx, results) {
             _this.emit("getallcontacts", results.rows);
-        });
+        }, onError);
     });
+}
+
+function onError(err) {
+    console.log(err);
 }
 
 exports.dbname = dbname;

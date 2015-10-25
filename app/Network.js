@@ -22,7 +22,9 @@ Network.prototype.Connect = function () {
 }
 
 Network.prototype.Send = function (msg) {
-    this.socket.write(msg);
+    if (this.connected == true) {
+        this.socket.write(msg);
+    }
 }
 
 Network.prototype.Disconnect = function () {

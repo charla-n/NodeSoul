@@ -66,7 +66,7 @@ function RespMsg(splittedarr) {
 function RespWatch(splittedarr) {
     var dpsplitted = splittedarr[1].split(":");
     var loginsplitted = dpsplitted[3].split("@");
-    var loginindex = FindLoginIndex(loginindex[0]);
+    var loginindex = FindLoginIndex(loginsplitted[0]);
 
     if (loginindex != -1) {
         var positionindex = FindPositionIndex(loginindex, dpsplitted[0]);
@@ -79,6 +79,7 @@ function RespWatch(splittedarr) {
                 Client.GetContacts()[loginindex].positions[positionindex].status = splittedarr[3];
                 console.log(Client.GetContacts());
             }
+            emitter.emit("watchuser", Client.GetContacts()[loginindex]);
         }
     }
 }
@@ -120,7 +121,7 @@ function FindLoginIndex(login) {
 
 function FindPositionIndex(loginindex, socket) {
     return underscore.findIndex(Client.GetContacts()[loginindex].positions, function (cur) {
-        if (socket == curpos.socket) {
+        if (socket == cur.socket) {
             return true;
         }
     });
