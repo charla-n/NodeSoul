@@ -73,12 +73,14 @@ function RespWatch(splittedarr) {
         if (positionindex != -1) {
             if (splittedarr[3] === "state") {
                 Client.GetContacts()[loginindex].positions[positionindex].status = splittedarr[4].split(":")[0];
-                console.log(Client.GetContacts());
             }
-            else {
-                Client.GetContacts()[loginindex].positions[positionindex].status = splittedarr[3];
-                console.log(Client.GetContacts());
+            else if (splittedarr[3] === "logout") {
+                Client.RemovePosition(loginindex, positionindex);
             }
+            emitter.emit("watchuser", Client.GetContacts()[loginindex]);
+        }
+        else if (splittedarr[3] === "login") {
+            Client.GetContacts()[loginindex].positions.push(UpdatePositionFromWatch(dpsplitted, splittedarr[3]));
             emitter.emit("watchuser", Client.GetContacts()[loginindex]);
         }
     }
@@ -131,6 +133,13 @@ function UpdatePosition(arr) {
     return {
         socket: arr[0], host: arr[2], trustlevel: arr[5] + arr[6], workstationtype: arr[7], 
         location: decodeURI(arr[8]), group: arr[9], status: arr[10].split(":")[0], userdata: decodeURI(arr[11])
+    };
+}
+
+function UpdatePositionFromWatch(arr, gstatus) {
+    return {
+        socket: arr[0], host: arr[3].split("@")[1], trustlevel: arr[2], workstationtype: arr[4],
+        location: decodeURI(arr[5]), group: arr[6], status: gstatus, userdata: ""
     };
 }
 

@@ -4,11 +4,21 @@ var Client = require('../app/Client.js');
 var swig = require('swig');
 var Storage = require("../app/Storage.js");
 
+var menu = new Menu();
+var px = 0;
+var py = 0;
+var elem;
+var db = new Storage(openDatabase(Storage.dbname, Storage.version, Storage.comment, Storage.size));
+
 if (Client.Connected == false) {
     window.location.href = "auth.html";
 }
 
 $(document).ready(function () {
+    $("#scontacts").mousemove(function (event) {
+        px = event.pageX;
+        py = event.pageY;
+    });
     $("#close").click(function () {
         gui.App.quit();
     });
@@ -40,6 +50,12 @@ $(document).ready(function () {
     Prot.Emitter.on("watchuser", function (contact) {
         render();
     });
+    db.on("deletecontact", function () {
+        render();
+    });
+    db.on("updatecontact", function () {
+        render();
+    });
 });
 
 function setState(state) {
@@ -52,9 +68,7 @@ function render() {
     }));
 }
 
-function ListAndWatchUsers() {
-    var db = new Storage(openDatabase(Storage.dbname, Storage.version, Storage.comment, Storage.size));
-    
+function ListAndWatchUsers() {    
     db.once("getallcontacts", function (rows) {
         
         Client.FlushContact();
@@ -78,4 +92,45 @@ function ListAndWatchUsers() {
     db.GetAllContacts();
 }
 
+function onListClick(gelem) {
+    console.log(gelem);
+    elem = gelem;
+    menu.popup(px, py);
+}
 
+function Menu() {
+    var menu = new gui.Menu()
+
+      , msg = new gui.MenuItem({
+            label: "Message"
+            , click: function () {
+                console.log('Menu:', 'message');
+            }
+        })
+
+      , ignore = new gui.MenuItem({
+            label: "Ignore/Unignored"
+            , click: function () {
+                var login = elem[0].innerText.split(" ")[0];
+                var ignored = !Client.GetContact(login).ignored;
+                Client.IgnoreContact(login, ignored);
+                db.UpdateContact(login, ignored);
+            }
+        })
+
+      , remove = new gui.MenuItem({
+            label: "Remove"
+            , click: function () {
+                var login = elem[0].innerText.split(" ")[0];
+                Client.RemoveContact(login);
+                db.RemoveContact(login);
+            }
+        })
+    ;
+    
+    menu.append(msg);
+    menu.append(ignore);
+    menu.append(remove);
+    
+    return menu;
+}

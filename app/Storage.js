@@ -40,7 +40,7 @@ Storage.prototype.InsertContact = function (login, ignored) {
 Storage.prototype.UpdateContact = function (login, ignored) {
     this.db.transaction(function (tx) {
         tx.executeSql("UPDATE scontact SET ignored=? WHERE login=?", [ignored, login], function (tx, results) {
-            
+            _this.emit("updatecontact");
         }, onError);
     });
 }
@@ -85,6 +85,14 @@ Storage.prototype.GetAllContacts = function () {
             _this.emit("getallcontacts", results.rows);
         }, onError);
     });
+}
+
+Storage.prototype.RemoveContact = function (login) {
+    this.db.transaction(function (tx) {
+        tx.executeSql("DELETE FROM scontact WHERE login=?", [login], function (tx, results) {
+            _this.emit("deletecontact");
+        }, onError);
+    })
 }
 
 function onError(err) {
