@@ -11,29 +11,58 @@
     <script src="../app/Index.js"></script>
 </head>
 <body>
-    <ul class="horizontal-menu">
-        <li>
-            <a href="#" class="dropdown-toggle">File</a>
-            <ul class="d-menu" data-role="dropdown">
-                <li>
-                    <a href="#" class="dropdown-toggle">States</a>
-                    <ul class="d-menu" data-role="dropdown">
-                        <li><a id="savailable" href="#">Available</a></li>
-                        <li><a id="saway" href="#">Away</a></li>
-                        <li><a id="slocked" href="#">Locked</a></li>
-                    </ul>
-                </li>
-                <li><a id="close" href="#">Close</a></li>
-            </ul>
-        </li>
-        <li>
-            <a href="#" class="dropdown-toggle">Contact</a>
-            <ul class="d-menu" data-role="dropdown">
-                <li><a id="addcontact" href="#">Add Contact</a></li>
-            </ul>
-        </li>
-    </ul>
-    <div id="scontacts"></div>
-    <div id="sstate" class="bg-grayDark fg-white padding10 text-shadow" style="text-align:center;bottom:0;left:0;position:absolute;width:100%"></div>
+    <div>
+        <ul class="horizontal-menu" style="position:fixed;z-index:9999">
+            <li>
+                <a href="#" class="dropdown-toggle">File</a>
+                <ul class="d-menu" data-role="dropdown">
+                    <li>
+                        <a href="#" class="dropdown-toggle">States</a>
+                        <ul class="d-menu" data-role="dropdown">
+                            <li><a id="savailable" href="#">Available</a></li>
+                            <li><a id="saway" href="#">Away</a></li>
+                            <li><a id="slocked" href="#">Locked</a></li>
+                        </ul>
+                    </li>
+                    <li><a id="close" href="#">Close</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="#" class="dropdown-toggle">Contact</a>
+                <ul class="d-menu" data-role="dropdown">
+                    <li><a id="addcontact" href="#">Add Contact</a></li>
+                </ul>
+            </li>
+        </ul>
+        <div style="width:300px;position:fixed;top:42px;">
+            <div id="sstate" class="bg-grayDark fg-white padding10 text-shadow" style="text-align:center"></div>
+            <div id="scontacts"></div>
+        </div>
+        <div id="msg" style="position:absolute;top:39px;left:300px;margin-left:5px;">
+            <div style="width:100%">
+                <div style="float:left">
+                    <button class="image-button" id="ignorecontactbtn">
+                        Ignore/Unignored contact
+                        <span class="icon mif-volume-mute"></span>
+                    </button>
+                </div>
+                <div style="float:left;">
+                    <button class="image-button" id="removecontactbtn">
+                        Remove contact
+                        <span class="icon mif-cross"></span>
+                    </button>
+                </div>
+            </div>
+            <div id="msgcontent" style="clear:both;max-width:800px;max-height:600px;overflow:auto;">
+                <div id="recmsg" style="padding-bottom:5px;">
+                    coucou<br />coucoufjdskfljsdfjlksdjlfkjsdlkfjklsdfjdsjlfjksdfklsdkfjksdjlfksdjlkfsdkjfklsdjflsdjfkldsjfkljsdklfkdjfkljsdlfkjdsklfjklsdjflkdjsfkljsdkljfklsdjfsdklfjsdlfkjdsklfjsdklfjsdklfjklsdjfkldsjfklsdjfklsdjfklsdfjksdklfjsdklfsdjklfsdfjsdlkfjsdklfjklsdklfjlsjdkksfjklsdfkljsdklfjlkdjfsdkfljkldjklfjls<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />end<br />
+                </div>
+            </div>
+            <div class="form-actions" id="sendmsg" style="bottom:0;width:100%">
+                <textarea style="width:100%; resize:none;" rows="5"></textarea>
+                <button id="SendMsg" class="button primary" style="width:100%">Send</button>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

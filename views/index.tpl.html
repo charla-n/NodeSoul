@@ -1,9 +1,10 @@
-﻿<div class="listview set-border padding10 default" data-role="listview" id="lv1" data-on-list-click="onListClick(list)">
+﻿<div class="listview padding10 default" data-role="listview" id="lv1" data-on-list-click="onListClick(list)"
+     style="margin-top: -15px;">
     {% for contact in contacts %}
         {% if contact.positions.length == 0 %}
             <div class="list">
                 <span class="
-                      {% if contact.ignored %} mif-cross
+                      {% if contact.ignored %} mif-volume-mute
                       {% else %} mif-bubble
                       {% endif %}
                       fg-red list-icon"></span>
@@ -13,7 +14,7 @@
             {% for position in contact.positions %}
                 <div class="list">
                     <span class="
-                          {% if contact.ignored %} mif-cross
+                          {% if contact.ignored %} mif-volume-mute
                           {% else %} mif-bubble
                           {% endif %}
                           {% if position.status == 'logout' %} fg-red 
@@ -29,5 +30,3 @@
         {% endif %}
     {% endfor %}
 </div>
-
-<!--alert('You select ' + list.find('.list-title').text())-->

@@ -8,6 +8,9 @@ var id;
 var state = "logged off";
 var connected = 0;
 
+var EventEmitter = require('events').EventEmitter;
+var emitter = new EventEmitter();
+
 exports.SetLogin = function (glogin) {
     login = glogin;
 }
@@ -46,6 +49,7 @@ exports.AddContact = function (login) {
 
 exports.RemoveContact = function (login) {
     contacts.splice(GetIndexFromLogin(login), 1);
+    emitter.emit("removecontact");
 }
 
 exports.RemovePosition = function (loginindex, positionindex) {
@@ -54,6 +58,7 @@ exports.RemovePosition = function (loginindex, positionindex) {
 
 exports.IgnoreContact = function (login, ignored) {
     contacts[GetIndexFromLogin(login)].ignored = ignored;
+    emitter.emit("updatecontact");
 }
 
 exports.GetContact = function (login) {
@@ -93,3 +98,4 @@ function GetIndexFromLogin(login) {
 exports.Netsoul = netsoul;
 exports.Connected = connected;
 exports.Id = id;
+exports.Emitter = emitter;
