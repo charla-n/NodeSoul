@@ -22,7 +22,7 @@ $(document).ready(function () {
     });
     db.on("getcontact", function (item) {
         if (item == null) {
-            Client.AddContact($("#user_login").val());
+            Client.AddContact($("#user_login").val(), 0);
             db.InsertContact($("#user_login").val(), 0);
             $.Notify({
                 caption: 'Contact added',

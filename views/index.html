@@ -34,9 +34,13 @@
                 </ul>
             </li>
         </ul>
-        <div style="width:300px;position:fixed;top:42px;">
+        <div style="width:300px;position:fixed;top:42px;overflow:auto">
             <div id="sstate" class="bg-grayDark fg-white padding10 text-shadow" style="text-align:center"></div>
-            <div id="scontacts"></div>
+            <div id="scontacts" style="height:700px">
+                <div class="listview padding10" data-role="listview" id="lv1" data-on-list-click="onListClick(list)"
+                     style="margin-top: -15px;">
+                </div>
+            </div>
         </div>
         <div id="msg" style="position:absolute;top:39px;left:300px;margin-left:5px;">
             <div style="width:100%">
@@ -53,9 +57,9 @@
                     </button>
                 </div>
             </div>
-            <div id="msgcontent" style="clear:both;max-width:800px;max-height:600px;overflow:auto;">
+            <div id="msgcontent" style="clear:both;width:800px;height:600px;overflow:auto;">
                 <div id="recmsg" style="padding-bottom:5px;">
-                    coucou<br />coucoufjdskfljsdfjlksdjlfkjsdlkfjklsdfjdsjlfjksdfklsdkfjksdjlfksdjlkfsdkjfklsdjflsdjfkldsjfkljsdklfkdjfkljsdlfkjdsklfjklsdjflkdjsfkljsdkljfklsdjfsdklfjsdlfkjdsklfjsdklfjsdklfjklsdjfkldsjfklsdjfklsdjfklsdfjksdklfjsdklfsdjklfsdfjsdlkfjsdklfjklsdklfjlsjdkksfjklsdfkljsdklfjlkdjfsdkfljkldjklfjls<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />end<br />
+                    coucou<br />coucoujdsklfjklklsdfjksdklfjsdklfsdjklfsdfjsdlkfjsdklfjklsdklfjlsjdkksfjklsdfkljsdklfjlkdjfsdkfljkldjklfjls<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />coucou<br />end<br />
                 </div>
             </div>
             <div class="form-actions" id="sendmsg" style="bottom:0;width:100%">

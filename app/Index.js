@@ -4,8 +4,6 @@ var Client = require('../app/Client.js');
 var swig = require('swig');
 var Storage = require("../app/Storage.js");
 
-var px = 0;
-var py = 0;
 var elem;
 var db = new Storage(openDatabase(Storage.dbname, Storage.version, Storage.comment, Storage.size));
 
@@ -14,10 +12,6 @@ var db = new Storage(openDatabase(Storage.dbname, Storage.version, Storage.comme
 //}
 
 $(document).ready(function () {
-    $("#scontacts").mousemove(function (event) {
-        px = event.pageX;
-        py = event.pageY;
-    });
     $("#close").click(function () {
         gui.App.quit();
     });
@@ -43,16 +37,23 @@ $(document).ready(function () {
         });
     });
     $("#ignorecontactbtn").click(function () {
-        if (elem !== "undefined") {
-            var login = elem[0].innerText.trim();
-            var ignored = !Client.GetContact(login).ignored;
+        if (elem !== undefined) {
+            var login = elem.innerText.trim().split(" ")[0];
+            var ignored = Client.GetContact(login).ignored;
+            if (ignored == 1) {
+                ignored = 0;
+            }
+            else {
+                ignored = 1;
+            }
             Client.IgnoreContact(login, ignored);
             db.UpdateContact(login, ignored);
         }
     });
     $("#removecontactbtn").click(function () {
-        if (elem !== "undefined") {
-            var login = elem[0].innerText.trim();
+        if (elem !== undefined) {
+            var login = elem.innerText.trim().split(" ")[0];
+            console.log("remove " + login);
             Client.RemoveContact(login);
             db.RemoveContact(login);
         }
@@ -71,6 +72,10 @@ $(document).ready(function () {
     Client.Emitter.on("updatecontact", function () {
         render();
     });
+    Client.Emitter.on("inserthistory", function (obj) {
+        $("#recmsg").append(obj);
+        $('#msgcontent').scrollTop($("#msgcontent")[0].scrollHeight);
+    });
 });
 
 function setState(state) {
@@ -78,9 +83,14 @@ function setState(state) {
 }
 
 function render() {
-    $("#scontacts").html(swig.renderFile("./views/index.tpl.html", {
+    $("#lv1").html(swig.renderFile("./views/index.tpl.html", {
         contacts: Client.GetContacts()
     }));
+    //if (elem !== undefined) {
+    //    console.log("render");
+    //    console.log($("span:contains('" + elem[0].innerText.trim() + "')").parent());
+    //    onListClick($("span:contains('" + elem[0].innerText.trim() + "')").parent());
+    //}
 }
 
 function ListAndWatchUsers() {    
@@ -91,14 +101,14 @@ function ListAndWatchUsers() {
         var logins = "";
         if (len > 0) {
             logins += rows.item(0).login;
-            Client.AddContact(rows.item(0).login);
+            Client.AddContact(rows.item(0).login, rows.item(0).ignored);
         }
         else {
             return;
         }
         for (i = 1; i < len; i++) {
             logins += "," + rows.item(i).login;
-            Client.AddContact(rows.item(i).login);
+            Client.AddContact(rows.item(i).login, rows.item(i).ignored);
         }
         render();
         Client.Netsoul.Send(Prot.ListUsers(logins));
@@ -109,5 +119,16 @@ function ListAndWatchUsers() {
 
 function onListClick(gelem) {
     console.log(gelem);
-    elem = gelem;
+    if (elem !== undefined) {
+        elem.style.background = "none";
+    }
+    elem = gelem[0];
+    Client.ChangeSelected(elem.innerText.trim().split(" ")[0], $('span:first', elem).attr("id"));
+    setSelectedItemBackground();
+}
+
+function setSelectedItemBackground() {
+    if (elem !== undefined) {
+        elem.style.background = "#4390df";
+    }
 }

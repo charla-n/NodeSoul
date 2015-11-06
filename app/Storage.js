@@ -13,7 +13,7 @@ function Storage(db) {
         //tx.executeSql("DROP TABLE suser");
         //tx.executeSql("DROP TABLE scontact");
         tx.executeSql('CREATE TABLE IF NOT EXISTS suser (id INTEGER PRIMARY KEY AUTOINCREMENT, login text, data text, location text)');
-        tx.executeSql('CREATE TABLE IF NOT EXISTS scontact (id INTEGER PRIMARY KEY AUTOINCREMENT, login text, ignored bit)');
+        tx.executeSql('CREATE TABLE IF NOT EXISTS scontact (id INTEGER PRIMARY KEY AUTOINCREMENT, login text, ignored integer)');
     });
     EventEmitter.call(this);
     _this = this;

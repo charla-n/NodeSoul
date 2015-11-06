@@ -43,8 +43,8 @@ exports.GetData = function () {
     return data;
 }
 
-exports.AddContact = function (login) {
-    contacts.push({ login: login, ignored: false, positions: []});
+exports.AddContact = function (login, ignored) {
+    contacts.push({ login: login, ignored: ignored, positions: []});
 }
 
 exports.RemoveContact = function (login) {
@@ -59,6 +59,55 @@ exports.RemovePosition = function (loginindex, positionindex) {
 exports.IgnoreContact = function (login, ignored) {
     contacts[GetIndexFromLogin(login)].ignored = ignored;
     emitter.emit("updatecontact");
+}
+
+exports.InsertHistory = function (login, history, socket) {
+    var len = contacts.length;
+    
+    console.log("looking for " + login + " " + socket);
+    for (i = 0; i < len; i++) {
+        if (contacts[i].login === login) {
+            var lenj = contacts[i].positions.length;
+            for (j = 0; j < lenj; j++) {
+                if (socket === contacts[i].positions[j].socket) {
+                    if (contacts[i].positions[j].history === undefined) {
+                        contacts[i].positions[j].history = "";
+                    }
+                    contacts[i].positions[j].history += history;
+                    console.log("position history =[" + contacts[i].positions[j].history + "]");
+                    if (contacts[i].positions[j].selected == true) {
+                        console.log("emit inserhistory ! with " + socket + " " + history);
+                        emitter.emit("inserthistory", history);
+                    }
+                    break;
+                }
+            }
+            break;
+        }
+    }
+}
+
+exports.ChangeSelected = function (login, socket) {
+    var len = contacts.length;
+    
+    console.log("looking for " + login + " " + socket);
+    for (i = 0; i < len; i++) {
+        console.log("[" + contacts[i].login + "]==[" + login + "]");
+        if (contacts[i].login === login) {
+            console.log("found login " + login);
+            var lenj = contacts[i].positions.length;
+            for (j = 0; j < lenj; j++) {
+                console.log(contacts[i].positions[j]);
+                if (contacts[i].positions[j].socket === socket) {
+                    contacts[i].positions[j].selected = true;
+                    console.log("set selected " + contacts[i].login + " " + contacts[i].positions[j].socket);
+                }
+                else {
+                    contacts[i].positions[j].selected = false;
+                }
+            }
+        }
+    }
 }
 
 exports.GetContact = function (login) {
