@@ -88,6 +88,7 @@ $(document).ready(function () {
     });
     Client.Emitter.on("unreadhistory", function () {
         render();
+        window.LOCAL_NW.desktopNotifications.notify("../css/bubble.png", "You have a new message");
     });
 });
 

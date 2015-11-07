@@ -80,6 +80,7 @@ exports.InsertHistory = function (login, history, socket) {
                         emitter.emit("inserthistory", history);
                     }
                     else {
+                        
                         contacts[i].positions[j].unread = true;
                         emitter.emit("unreadhistory");
                     }

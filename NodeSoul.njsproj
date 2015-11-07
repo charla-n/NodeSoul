@@ -16,6 +16,8 @@
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
   <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
   <ItemGroup>
+    <Content Include="css\bubble.png" />
+    <Content Include="views\nw-desktop-notifications.html" />
     <Content Include="credits.html" />
     <Content Include="css\metro-icons.min.css" />
     <Content Include="fonts\metro.eot" />
@@ -29,6 +31,7 @@
     <Compile Include="app\Client.js" />
     <Compile Include="app\Index.js" />
     <Compile Include="app\Network.js" />
+    <Compile Include="views\nw-desktop-notifications.js" />
     <Compile Include="app\Protocol.js" />
     <Content Include="css\metro.min.css" />
     <Compile Include="app\Storage.js" />
