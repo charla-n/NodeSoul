@@ -79,6 +79,10 @@ exports.InsertHistory = function (login, history, socket) {
                     if (contacts[i].positions[j].selected == true) {
                         emitter.emit("inserthistory", history);
                     }
+                    else {
+                        contacts[i].positions[j].unread = true;
+                        emitter.emit("unreadhistory");
+                    }
                     break;
                 }
             }
@@ -102,6 +106,7 @@ exports.ChangeSelected = function (login, socket) {
             console.log(contacts[i].positions[j]);
             if (contacts[i].positions[j].socket === socket && contacts[i].login === login) {
                 contacts[i].positions[j].selected = true;
+                contacts[i].positions[j].unread = false;
             }
             else {
                 contacts[i].positions[j].selected = false;

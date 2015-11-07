@@ -60,12 +60,12 @@ $(document).ready(function () {
     });
     $("#SendMsg").click(function () {
         Client.Netsoul.Send(Prot.Msg(elem.innerText.trim().split(" ")[0], $("#msgtextarea").val(), $('span:first', elem).attr("id")));
-        $("#msgtextarea").empty();
+        $("#msgtextarea").val("");
     });
-    $("#SendMsg").click(function (e) {
+    $("#msgtextarea").keydown(function (e) {
         if (e.ctrlKey && e.keyCode == 13) {
             Client.Netsoul.Send(Prot.Msg(elem.innerText.trim().split(" ")[0], $("#msgtextarea").val(), $('span:first', elem).attr("id")));
-            $("#msgtextarea").empty();
+            $("#msgtextarea").val("");
         }
     });
     setState(Client.GetState());
@@ -85,6 +85,9 @@ $(document).ready(function () {
     Client.Emitter.on("inserthistory", function (obj) {
         $("#recmsg").append(obj);
         $('#msgcontent').scrollTop($("#msgcontent")[0].scrollHeight);
+    });
+    Client.Emitter.on("unreadhistory", function () {
+        render();
     });
 });
 

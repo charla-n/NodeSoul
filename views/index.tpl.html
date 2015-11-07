@@ -23,7 +23,7 @@
                           {% elseif position.status == 'lock' %} fg-gray
                           {% else %} fg-violet
                           {% endif %} list-icon"></span>
-                    <span class="list-title">{{contact.login}} on {{position.location}}</span>
+                    <span class="list-title" style="{% if position.unread %} font-weight:bold {% endif %}">{{contact.login}} on {{position.location}}</span>
                 </div>
             {% endfor %}
         {% endif %}
