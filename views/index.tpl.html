@@ -1,6 +1,6 @@
 ﻿    {% for contact in contacts %}
         {% if contact.positions.length == 0 %}
-            <div class="list">
+            <div class="list" style="{% if contact.selected %} background-color: #4390df; {% endif %}">
                 <span class="
                       {% if contact.ignored == true %} mif-volume-mute
                       {% else %} mif-bubble
@@ -10,7 +10,7 @@
             </div>
         {% else %}
             {% for position in contact.positions %}
-                <div class="list">
+                <div class="list" style="{% if position.selected %} background-color: #4390df; {% endif %}">
                     <span id="{{position.socket}}"></span>
                     <span class="
                           {% if contact.ignored == true %} mif-volume-mute

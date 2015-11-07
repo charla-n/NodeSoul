@@ -44,7 +44,7 @@ exports.GetData = function () {
 }
 
 exports.AddContact = function (login, ignored) {
-    contacts.push({ login: login, ignored: ignored, positions: []});
+    contacts.push({ login: login, ignored: ignored, positions: [], selected: false, oldhistory: ""});
 }
 
 exports.RemoveContact = function (login) {
@@ -64,9 +64,11 @@ exports.IgnoreContact = function (login, ignored) {
 exports.InsertHistory = function (login, history, socket) {
     var len = contacts.length;
     
-    console.log("looking for " + login + " " + socket);
     for (i = 0; i < len; i++) {
         if (contacts[i].login === login) {
+            if (contacts[i].ignored == true) {
+                break;
+            }
             var lenj = contacts[i].positions.length;
             for (j = 0; j < lenj; j++) {
                 if (socket === contacts[i].positions[j].socket) {
@@ -74,9 +76,7 @@ exports.InsertHistory = function (login, history, socket) {
                         contacts[i].positions[j].history = "";
                     }
                     contacts[i].positions[j].history += history;
-                    console.log("position history =[" + contacts[i].positions[j].history + "]");
                     if (contacts[i].positions[j].selected == true) {
-                        console.log("emit inserhistory ! with " + socket + " " + history);
                         emitter.emit("inserthistory", history);
                     }
                     break;
@@ -90,24 +90,62 @@ exports.InsertHistory = function (login, history, socket) {
 exports.ChangeSelected = function (login, socket) {
     var len = contacts.length;
     
-    console.log("looking for " + login + " " + socket);
     for (i = 0; i < len; i++) {
-        console.log("[" + contacts[i].login + "]==[" + login + "]");
         if (contacts[i].login === login) {
-            console.log("found login " + login);
+            contacts[i].selected = true;
+        }
+        else {
+            contacts[i].selected = false;
+        }
+        var lenj = contacts[i].positions.length;
+        for (j = 0; j < lenj; j++) {
+            console.log(contacts[i].positions[j]);
+            if (contacts[i].positions[j].socket === socket && contacts[i].login === login) {
+                contacts[i].positions[j].selected = true;
+            }
+            else {
+                contacts[i].positions[j].selected = false;
+            }
+        }
+    }
+}
+
+exports.GetHistoryFromPosition = function (login, socket) {
+    var len = contacts.length;
+
+    for (i = 0; i < len; i++) {
+        if (contacts[i].login === login) {
             var lenj = contacts[i].positions.length;
+            if (lenj === 0) {
+                return contacts[i].oldhistory;
+            }
             for (j = 0; j < lenj; j++) {
-                console.log(contacts[i].positions[j]);
                 if (contacts[i].positions[j].socket === socket) {
-                    contacts[i].positions[j].selected = true;
-                    console.log("set selected " + contacts[i].login + " " + contacts[i].positions[j].socket);
-                }
-                else {
-                    contacts[i].positions[j].selected = false;
+                    console.log(contacts[i].positions[j].history);
+                    if (contacts[i].positions[j].history === undefined) {
+                        return "";
+                    }
+                    return contacts[i].positions[j].history;
                 }
             }
         }
     }
+}
+
+exports.CopyHistoryOnLogout = function (login) {
+    var len = contacts.length;
+    var oldhistory = "";
+    
+    for (i = 0; i < len; i++) {
+        if (contacts[i].login === login) {
+            var lenj = contacts[i].positions.length;
+            for (j = 0; j < lenj; j++) {
+                oldhistory += contacts[i].positions[j].history;
+            }
+            break;
+        }
+    }
+    contacts[i].oldhistory += oldhistory;
 }
 
 exports.GetContact = function (login) {

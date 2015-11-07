@@ -59,7 +59,7 @@ function Parse(msg, client) {
 }
 
 function RespMsg(splittedarr) {
-    var msg = decodeURI(splittedarr[4]);
+    var msg = decodeURIComponent(splittedarr[4]);
     var dpsplitted = splittedarr[1].split(":");
     var loginsplitted = dpsplitted[3].split("@");
     var currentdate = new Date();
@@ -67,7 +67,8 @@ function RespMsg(splittedarr) {
     ((currentdate.getHours() < 10 ? '0' : '') + currentdate.getHours()) + ":" + 
     ((currentdate.getMinutes() < 10 ? '0' : '') + currentdate.getMinutes()) + ":" + 
     ((currentdate.getSeconds() < 10 ? '0' : '') + currentdate.getSeconds()) + "]</td>" +
-    "<td style=\"font-size: 0.9em\">" + msg + "</td></tr></table><span class=\"bottom\"></span>";
+    "<td style=\"font-size: 0.9em\">&lt;<span style=\"font-weight: bold; color: red\">" + loginsplitted[0] +
+    "</span>&gt;&nbsp;" + msg + "</td></tr></table><span class=\"bottom\"></span>";
     Client.InsertHistory(loginsplitted[0], finalmsg, dpsplitted[0]);
     console.log(finalmsg);
 }
@@ -152,8 +153,16 @@ function UpdatePositionFromWatch(arr, gstatus) {
     };
 }
 
-function Msg(to, msg) {
-    return "user_cmd msg_user {" + to + "} msg " + encodeURI(msg) + "\n";
+function Msg(to, msg, socket) {
+    var currentdate = new Date();
+    var finalmsg = "<table><tr><td valign=\"top\" style=\"color: #C0C0C0; font-size: 0.9em\">[" +
+    ((currentdate.getHours() < 10 ? '0' : '') + currentdate.getHours()) + ":" + 
+    ((currentdate.getMinutes() < 10 ? '0' : '') + currentdate.getMinutes()) + ":" + 
+    ((currentdate.getSeconds() < 10 ? '0' : '') + currentdate.getSeconds()) + "]</td>" +
+    "<td style=\"font-size: 0.9em\">&lt;<span style=\"font-weight: bold; color: blue\">me" +
+    "</span>&gt;&nbsp;" + msg + "</td></tr></table><span class=\"bottom\"></span>";
+    Client.InsertHistory(to, finalmsg, socket);
+    return "user_cmd msg_user {:" + socket + "} msg " + encodeURIComponent(msg) + "\n";
 }
 
 function ListUsers(login) {

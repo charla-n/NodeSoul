@@ -58,6 +58,10 @@ $(document).ready(function () {
             db.RemoveContact(login);
         }
     });
+    $("#SendMsg").click(function () {
+        Client.Netsoul.Send(Prot.Msg(elem.innerText.trim().split(" ")[0], $("#msgtextarea").val(), $('span:first', elem).attr("id")));
+        $("msgtextarea").val("");
+    });
     setState(Client.GetState());
     ListAndWatchUsers();
     Prot.Emitter.on("listuser", function (contact) {
@@ -86,11 +90,6 @@ function render() {
     $("#lv1").html(swig.renderFile("./views/index.tpl.html", {
         contacts: Client.GetContacts()
     }));
-    //if (elem !== undefined) {
-    //    console.log("render");
-    //    console.log($("span:contains('" + elem[0].innerText.trim() + "')").parent());
-    //    onListClick($("span:contains('" + elem[0].innerText.trim() + "')").parent());
-    //}
 }
 
 function ListAndWatchUsers() {    
@@ -124,11 +123,6 @@ function onListClick(gelem) {
     }
     elem = gelem[0];
     Client.ChangeSelected(elem.innerText.trim().split(" ")[0], $('span:first', elem).attr("id"));
-    setSelectedItemBackground();
-}
-
-function setSelectedItemBackground() {
-    if (elem !== undefined) {
-        elem.style.background = "#4390df";
-    }
+    $("#recmsg").html(Client.GetHistoryFromPosition(elem.innerText.trim().split(" ")[0], $('span:first', elem).attr("id")));
+    render();
 }
