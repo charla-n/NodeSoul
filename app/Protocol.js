@@ -59,7 +59,8 @@ function Parse(msg, client) {
 }
 
 function RespMsg(splittedarr) {
-    var msg = decodeURIComponent(splittedarr[4]);
+    splittedarr[4] = splittedarr[4].replace(/\%0A|\%0a|\%0D|\%0d|\%0d0a|\%0D0A/g, "<br/>");
+    var msg = unescape(splittedarr[4]);
     var dpsplitted = splittedarr[1].split(":");
     var loginsplitted = dpsplitted[3].split("@");
     var currentdate = new Date();
@@ -142,14 +143,14 @@ function FindPositionIndex(loginindex, socket) {
 function UpdatePosition(arr) {
     return {
         socket: arr[0], host: arr[2], trustlevel: arr[5] + arr[6], workstationtype: arr[7], 
-        location: decodeURI(arr[8]), group: arr[9], status: arr[10].split(":")[0], userdata: decodeURI(arr[11])
+        location: unescape(arr[8]), group: arr[9], status: arr[10].split(":")[0], userdata: unescape(arr[11])
     };
 }
 
 function UpdatePositionFromWatch(arr, gstatus) {
     return {
         socket: arr[0], host: arr[3].split("@")[1], trustlevel: arr[2], workstationtype: arr[4],
-        location: decodeURI(arr[5]), group: arr[6], status: gstatus, userdata: ""
+        location: unescape(arr[5]), group: arr[6], status: gstatus, userdata: ""
     };
 }
 
@@ -162,7 +163,7 @@ function Msg(to, msg, socket) {
     "<td style=\"font-size: 0.9em\">&lt;<span style=\"font-weight: bold; color: blue\">me" +
     "</span>&gt;&nbsp;" + msg + "</td></tr></table><span class=\"bottom\"></span>";
     Client.InsertHistory(to, finalmsg, socket);
-    return "user_cmd msg_user {:" + socket + "} msg " + encodeURIComponent(msg) + "\n";
+    return "user_cmd msg_user {:" + socket + "} msg " + escape(msg) + "\n";
 }
 
 function ListUsers(login) {

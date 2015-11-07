@@ -60,7 +60,13 @@ $(document).ready(function () {
     });
     $("#SendMsg").click(function () {
         Client.Netsoul.Send(Prot.Msg(elem.innerText.trim().split(" ")[0], $("#msgtextarea").val(), $('span:first', elem).attr("id")));
-        $("msgtextarea").val("");
+        $("#msgtextarea").empty();
+    });
+    $("#SendMsg").click(function (e) {
+        if (e.ctrlKey && e.keyCode == 13) {
+            Client.Netsoul.Send(Prot.Msg(elem.innerText.trim().split(" ")[0], $("#msgtextarea").val(), $('span:first', elem).attr("id")));
+            $("#msgtextarea").empty();
+        }
     });
     setState(Client.GetState());
     ListAndWatchUsers();
